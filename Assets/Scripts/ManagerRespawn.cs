@@ -34,6 +34,8 @@ public class ManagerRespawn : MonoBehaviour
     public State state = State.level_1;
 
     public GameObject johnGhost;
+    public GameObject map_zombie;
+    public GameObject map_apple;
 
     [HideInInspector]
     public new Transform transform;
@@ -44,6 +46,8 @@ public class ManagerRespawn : MonoBehaviour
 
     private GameObject _character_zombie;
     private GameObject _item_apple;
+
+
     //public Transform position;
 
     /*
@@ -135,16 +139,17 @@ public class ManagerRespawn : MonoBehaviour
     {
 
         //if(ManagerGame.moveOn == true)
-        Invoke(state.ToString(), 0.0f);
+        //Invoke(state.ToString(), 0.0f);
 
-        if (ManagerGame.gamePhase == 1)
+        if (ManagerGame.gamePhase == 2)
+        {
             ProcessInput();
+            ManagerGame.gamePhase = 3;
+        }
     }
 
-    void ProcessInput()
+    public void ProcessInput()
     {
-        
-
         if (0 <= ManagerGame.gameDays && ManagerGame.gameDays <= balence_level_1_border)
             state = State.level_1;
         else if (balence_level_1_border < ManagerGame.gameDays && ManagerGame.gameDays <= balence_level_2_border)
@@ -160,9 +165,12 @@ public class ManagerRespawn : MonoBehaviour
             {
                 selectedTile = Random.Range(13, 24);
 
-                Instantiate(Resources.Load("Prefabs/Character_Zombie"), johnGhost.transform.position +
-                    new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity);
+                map_zombie = Instantiate(Resources.Load("Prefabs/Character_Zombie"), johnGhost.transform.position +
+                    new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity) as GameObject;
 
+                Debug.Log("shit");
+                // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
+                map_zombie.transform.parent = GameObject.Find("Map").transform;
 
             }
 
@@ -170,8 +178,11 @@ public class ManagerRespawn : MonoBehaviour
             {
                 selectedTile = Random.Range(13, 24);
 
-                Instantiate(Resources.Load("Prefabs/Item_Apple"), johnGhost.transform.position +
-                    new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity);
+                map_apple = Instantiate(Resources.Load("Prefabs/Item_apple"), johnGhost.transform.position +
+                    new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity) as GameObject;
+
+                // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
+                map_apple.transform.parent = GameObject.Find("Map").transform;
             }
         }
         else if (state == State.level_2)
@@ -180,16 +191,22 @@ public class ManagerRespawn : MonoBehaviour
             {
                 selectedTile = Random.Range(5, 24);
 
-                Instantiate(Resources.Load("Prefabs/Character_Zombie"), johnGhost.transform.position +
-                   new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity);
+                map_zombie = Instantiate(Resources.Load("Prefabs/Character_Zombie"), johnGhost.transform.position +
+                    new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity) as GameObject;
+
+                // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
+                map_zombie.transform.parent = GameObject.Find("Map").transform;
             }
 
             for (int i = 0; i < balence_level_2_appleResNum; i++)
             {
                 selectedTile = Random.Range(13, 24);
 
-                Instantiate(Resources.Load("Prefabs/Item_Apple"), johnGhost.transform.position +
-                   new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity);
+                map_apple = Instantiate(Resources.Load("Prefabs/Item_apple"), johnGhost.transform.position +
+                    new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity) as GameObject;
+
+                // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
+                map_apple.transform.parent = GameObject.Find("Map").transform;
             }
         }
         else if (state == State.level_3)
@@ -198,78 +215,84 @@ public class ManagerRespawn : MonoBehaviour
             {
                 selectedTile = Random.Range(1, 24);
 
-                Instantiate(Resources.Load("Prefabs/Character_Zombie"), johnGhost.transform.position +
-                  new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity);
+                map_zombie = Instantiate(Resources.Load("Prefabs/Character_Zombie"), johnGhost.transform.position +
+                     new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity) as GameObject;
+
+                // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
+                map_zombie.transform.parent = GameObject.Find("Map").transform;
             }
 
             for (int i = 0; i < balence_level_3_appleResNum; i++)
             {
                 selectedTile = Random.Range(13, 24);
 
-                Instantiate(Resources.Load("Prefabs/Character_Apple"), johnGhost.transform.position +
-                   new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity);
+                map_apple = Instantiate(Resources.Load("Prefabs/Item_apple"), johnGhost.transform.position +
+                    new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity) as GameObject;
+
+                // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
+                map_apple.transform.parent = GameObject.Find("Map").transform;
             }
         }
-
-        ManagerGame.gamePhase = 2;
-        //Vector2 wp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //Ray2D ray = new Ray2D(wp, Vector2.zero);
-        //RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-
-        /*
-        if (hit.collider != null)
-        {
-            int layer = hit.transform.gameObject.layer;
-
-            if (layer == LayerMask.NameToLayer("TouchPad"))
-            {
-                string tag = hit.transform.gameObject.tag;
-
-                Vector2 johnsNextPosition = transform.position;
-
-                if (tag == "Right")
-                {
-                    Debug.Log("Right");
-                    johnsNextPosition.x += movePixel;
-                    johnGhost.transform.position = johnsNextPosition;
-                    ManagerGame.ghostMoved = true;
-                    state = State.Right;
-                }
-                else if (tag == "Left")
-                {
-                    Debug.Log("Left");
-                    johnsNextPosition.x -= movePixel;
-                    johnGhost.transform.position = johnsNextPosition;
-                    ManagerGame.ghostMoved = true;
-                    state = State.Left;
-                }
-                else if (tag == "Up")
-                {
-                    Debug.Log("Up");
-                    johnsNextPosition.y += movePixel;
-                    johnGhost.transform.position = johnsNextPosition;
-                    ManagerGame.ghostMoved = true;
-                    state = State.Up;
-                }
-                else if (tag == "Down")
-                {
-                    Debug.Log("Down");
-                    johnsNextPosition.y -= movePixel;
-                    johnGhost.transform.position = johnsNextPosition;
-                    ManagerGame.ghostMoved = true;
-                    state = State.Down;
-                }
-                else if (tag == "Mid")
-                {
-                    Debug.Log("Mid");
-                    johnGhost.transform.position = johnsNextPosition;
-                    ManagerGame.ghostMoved = true;
-                    state = State.Idle;
-                }
-            }
-            */
-
     }
+
+
+    //Vector2 wp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    //Ray2D ray = new Ray2D(wp, Vector2.zero);
+    //RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+    /*
+    if (hit.collider != null)
+    {
+        int layer = hit.transform.gameObject.layer;
+
+        if (layer == LayerMask.NameToLayer("TouchPad"))
+        {
+            string tag = hit.transform.gameObject.tag;
+
+            Vector2 johnsNextPosition = transform.position;
+
+            if (tag == "Right")
+            {
+                Debug.Log("Right");
+                johnsNextPosition.x += movePixel;
+                johnGhost.transform.position = johnsNextPosition;
+                ManagerGame.ghostMoved = true;
+                state = State.Right;
+            }
+            else if (tag == "Left")
+            {
+                Debug.Log("Left");
+                johnsNextPosition.x -= movePixel;
+                johnGhost.transform.position = johnsNextPosition;
+                ManagerGame.ghostMoved = true;
+                state = State.Left;
+            }
+            else if (tag == "Up")
+            {
+                Debug.Log("Up");
+                johnsNextPosition.y += movePixel;
+                johnGhost.transform.position = johnsNextPosition;
+                ManagerGame.ghostMoved = true;
+                state = State.Up;
+            }
+            else if (tag == "Down")
+            {
+                Debug.Log("Down");
+                johnsNextPosition.y -= movePixel;
+                johnGhost.transform.position = johnsNextPosition;
+                ManagerGame.ghostMoved = true;
+                state = State.Down;
+            }
+            else if (tag == "Mid")
+            {
+                Debug.Log("Mid");
+                johnGhost.transform.position = johnsNextPosition;
+                ManagerGame.ghostMoved = true;
+                state = State.Idle;
+            }
+        }
+        */
+
 
 
 

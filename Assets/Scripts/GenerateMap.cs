@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GenerateMap : MonoBehaviour {
-    
+public class GenerateMap : MonoBehaviour
+{
+
     //지형의 종류 1. Rock 2.Sea  //보류. 3. mine
     //private float tileNum = 3f;
 
@@ -24,9 +25,17 @@ public class GenerateMap : MonoBehaviour {
     private double i;
 
 
-	void Start () 
+    void Start()
     {
-        if (ManagerGame.gamePhase == 0)
+        ManagerGame.CreateMapObject();
+    }
+
+    private float[] tilePoint = new float[2];
+
+    float x_pos;
+    void Update()
+    {
+        if (ManagerGame.gamePhase == 1)
         {
             //FrameRate 늦춤
             Application.targetFrameRate = 10;
@@ -42,29 +51,29 @@ public class GenerateMap : MonoBehaviour {
 
             //맵 생성
             CreateMap();
-            ManagerGame.gamePhase = 1;
+            ManagerGame.gamePhase = 2;
         }
 
-	}
-
-    private float[] tilePoint = new float [2];
-
-    float x_pos;
-	void Update () 
-    {
-       
-
-
-	}
+    }
 
     void CreateRock(Vector3 position)
     {
-        Instantiate(Resources.Load("Map/Tile_Rock"), position, Quaternion.identity);
+        //rock 생성
+        GameObject map_rock = Instantiate(Resources.Load("Map/Tile_Rock"),
+            position, Quaternion.identity) as GameObject;
+
+        // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
+        map_rock.transform.parent = GameObject.Find("Map").transform;
     }
 
     void CreateSea(Vector3 position)
     {
-        Instantiate(Resources.Load("Map/Tile_Sea"), position, Quaternion.identity);
+        //sea 생성
+        GameObject map_sea = Instantiate(Resources.Load("Map/Tile_Sea"),
+            position, Quaternion.identity) as GameObject;
+
+        // sea tile 생성한 것을 Map오브젝트의 Child로 넣자
+        map_sea.transform.parent = GameObject.Find("Map").transform;
     }
 
     int test = 0;
@@ -76,7 +85,7 @@ public class GenerateMap : MonoBehaviour {
         // 
         for (int i = -25; i < 25; i++)
         {
-            
+
             x_pos = i + 0.5f;
             for (int j = 0; j < Balance_TileNum; j++)
             {
@@ -93,7 +102,7 @@ public class GenerateMap : MonoBehaviour {
 
                     Debug.Log(new Vector3(x_pos + 0.5f, tilePoint[j], 0) + "에 바다 만듦");
                 }
-                
+
                 //Debug.Log(generatePoint);
 
                 test++;
@@ -114,6 +123,6 @@ public class GenerateMap : MonoBehaviour {
 
         //Debug.Log("루프빠져나옴");
         //Debug.Log("돌 갯수 : " + test);
-            
+
     }
 }
