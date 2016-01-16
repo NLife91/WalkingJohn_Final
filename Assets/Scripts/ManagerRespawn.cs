@@ -33,6 +33,7 @@ public class ManagerRespawn : MonoBehaviour
     //public float moveSpeed = 1.0f;
     public State state = State.level_1;
 
+    public GameObject John;
     public GameObject johnGhost;
     public GameObject map_zombie;
     public GameObject map_apple;
@@ -171,6 +172,8 @@ public class ManagerRespawn : MonoBehaviour
                 Debug.Log("shit");
                 // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
                 map_zombie.transform.parent = GameObject.Find("Map").transform;
+                // 뻘짓 리스폰매니저가 가지고 있는 존을 좀비에게 붙임 되나?
+                //map_zombie.GetComponent<CharacterZombie>().john = John;
 
             }
 

@@ -6,7 +6,7 @@ public class CameraRigScript : MonoBehaviour
 
     public Transform target;
 
-    public float followSpeed = 0.2f;
+    public float followSpeed = 0.1f;
 
     private Vector3 _velocity;
 
@@ -23,7 +23,7 @@ public class CameraRigScript : MonoBehaviour
         //거리 계산은 에디터에서 한다.
         // CameraRig의 position 은Player와 똑같이 일단 맞추고 
         //Main Camera를 CameraRig 오브젝트의 자식으로 넣는 방법으로..
-
+        //transform.position = target.position;
         //방법2
         transform.position = Vector3.SmoothDamp(transform.position, target.position, ref _velocity, followSpeed);
         // ref : 참조전달 포인터의 역할.. 1에서 2로 바꾸는데 velocity값을 가지고 followSpeed의 시간만큼 딜레이

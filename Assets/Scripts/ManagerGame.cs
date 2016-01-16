@@ -3,6 +3,9 @@ using System.Collections;
 
 public class ManagerGame : MonoBehaviour
 {
+    public static bool ghostMoved = false;
+    public static bool zombieMove = false;
+
     public static int gamePhase = 0;
     public static int gameDays = 0;
 
