@@ -1,0 +1,390 @@
+fileFormatVersion: 2
+guid: 4c9b5e10ba3516d4f8619c7d404b8c9f
+timeCreated: 1453009769
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: UI_sandclock_0
+    21300002: UI_sandclock_1
+    21300004: UI_sandclock_2
+    21300006: UI_sandclock_3
+    21300008: UI_sandclock_4
+    21300010: UI_sandclock_5
+    21300012: UI_sandclock_6
+    21300014: UI_sandclock_7
+    21300016: UI_sandclock_8
+    21300018: UI_sandclock_9
+    21300020: UI_sandclock_10
+    21300022: UI_sandclock_11
+    21300024: UI_sandclock_12
+    21300026: UI_sandclock_13
+    21300028: UI_sandclock_14
+    21300030: UI_sandclock_15
+    21300032: UI_sandclock_16
+    21300034: UI_sandclock_17
+    21300036: UI_sandclock_18
+    21300038: UI_sandclock_19
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 90
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: UI_sandclock_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 270
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+    - name: UI_sandclock_1
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 270
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -3, y: 45}
+        - {x: -45, y: 11}
+        - {x: -45, y: -23}
+        - {x: -28, y: -41}
+        - {x: -23, y: -45}
+        - {x: 2, y: -45}
+        - {x: 29, y: -39}
+        - {x: 45, y: -13}
+        - {x: 45, y: 45}
+    - name: UI_sandclock_2
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 270
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -45, y: 32}
+        - {x: -45, y: -27}
+        - {x: 45, y: -27}
+        - {x: 45, y: 32}
+    - name: UI_sandclock_3
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 270
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -38, y: 45}
+        - {x: -45, y: 40}
+        - {x: -45, y: -2}
+        - {x: -40, y: -38}
+        - {x: -22, y: -45}
+        - {x: 45, y: -45}
+        - {x: 45, y: 15}
+        - {x: 28, y: 45}
+    - name: UI_sandclock_4
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 270
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+    - name: UI_sandclock_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 180
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+    - name: UI_sandclock_6
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 180
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+    - name: UI_sandclock_7
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 180
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+      - - {x: -2, y: -18}
+        - {x: -2, y: -27}
+        - {x: 8, y: -27}
+        - {x: 8, y: -18}
+    - name: UI_sandclock_8
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 180
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+    - name: UI_sandclock_9
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 180
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+    - name: UI_sandclock_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 90
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+    - name: UI_sandclock_11
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 90
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+    - name: UI_sandclock_12
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 90
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+    - name: UI_sandclock_13
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 90
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+    - name: UI_sandclock_14
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 90
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+    - name: UI_sandclock_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+    - name: UI_sandclock_16
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 0
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+    - name: UI_sandclock_17
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 0
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+    - name: UI_sandclock_18
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 0
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+    - name: UI_sandclock_19
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -27, y: 45}
+        - {x: -27, y: -45}
+        - {x: 33, y: -45}
+        - {x: 33, y: 45}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

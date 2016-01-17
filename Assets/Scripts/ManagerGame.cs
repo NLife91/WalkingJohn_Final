@@ -7,23 +7,24 @@ public class ManagerGame : MonoBehaviour
     public static bool zombieMove = false;
 
     public static int gamePhase = 0;
-    public static int gameDays = 0;
 
-    public int john_hp = 100;
-    public int john_day = 1;
-    public int john_score = 0;
+    public static int john_hp = 100;
+    public static int john_day = 1; //며칠 살아 남았는지. -> UI_DaysCount.cs
+    public static int john_score = 0;
 
     GameObject gameOverUI;
     GameObject gameStartUI;
+
+    public GameObject johnGhost;
 
 
     // Use this for initialization
     void Start()
     {
-        gameStartUI = GameObject.Instantiate(Resources.Load("Images/UI/UI_gamestart"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        gameStartUI = GameObject.Instantiate(Resources.Load("Images/UI/UI_gamestart"), johnGhost.transform.position, Quaternion.identity) as GameObject;
         gameStartUI.SetActive(true);
 
-        gameOverUI = GameObject.Instantiate(Resources.Load("Images/UI/UI_gameover"), new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+        gameOverUI = GameObject.Instantiate(Resources.Load("Images/UI/UI_gameover"), johnGhost.transform.position, Quaternion.identity) as GameObject;
         gameOverUI.SetActive(false);
 
     }

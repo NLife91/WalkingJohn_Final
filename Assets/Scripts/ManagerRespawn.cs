@@ -151,11 +151,11 @@ public class ManagerRespawn : MonoBehaviour
 
     public void ProcessInput()
     {
-        if (0 <= ManagerGame.gameDays && ManagerGame.gameDays <= balence_level_1_border)
+        if (0 <= ManagerGame.john_day && ManagerGame.john_day <= balence_level_1_border)
             state = State.level_1;
-        else if (balence_level_1_border < ManagerGame.gameDays && ManagerGame.gameDays <= balence_level_2_border)
+        else if (balence_level_1_border < ManagerGame.john_day && ManagerGame.john_day <= balence_level_2_border)
             state = State.level_2;
-        else if (balence_level_2_border < ManagerGame.gameDays)
+        else if (balence_level_2_border < ManagerGame.john_day)
             state = State.level_3;
 
         int selectedTile = 0;
