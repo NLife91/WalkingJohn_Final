@@ -38,7 +38,7 @@ public class UI_Timer : MonoBehaviour {
 
         TimeBar.size = timeLeft * (0.2f); 
 
-        Debug.Log("timeLeft = " + timeLeft);
+        //Debug.Log("timeLeft = " + timeLeft);
 
         if(timeLeft <= 0)
         {

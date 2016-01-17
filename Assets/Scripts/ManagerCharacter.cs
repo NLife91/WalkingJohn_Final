@@ -20,14 +20,17 @@ public class ManagerCharacter : MonoBehaviour
     private Animator _animator;
 
     private int _layermask;
-    private new Rigidbody2D rigidbody2D;
+    private Vector2 prevPosition;
+    private Vector2 johnsNextPosition;
+
+
 
     void Awake()
     {
         transform = GetComponent<Transform>();
+        prevPosition = transform.position;
         //_animator = GetComponent<Animator>();
         _layermask = LayerMask.GetMask("TouchPad");
-        rigidbody2D = GetComponent<Rigidbody2D>();
         johnGhost.transform.position = transform.position;
         touchPad.transform.position = transform.position;
     }
@@ -40,7 +43,7 @@ public class ManagerCharacter : MonoBehaviour
         if (state == State.Dead)
             return;
 
-        if (ManagerGame.ghostMoved != true)
+        if (ManagerGame.ghostMoved != true && ManagerGame.zombieMoved != true)
             ProcessInput();
     }
 
@@ -65,15 +68,14 @@ public class ManagerCharacter : MonoBehaviour
                 {
                     string tag = hit.transform.gameObject.tag;
 
-                    Vector2 johnsNextPosition = transform.position;
-
+                    johnsNextPosition = transform.position;
+                    prevPosition = transform.position;
                     if (tag == "Right")
                     {
                         //Debug.Log("Right");
                         johnsNextPosition.x += movePixel;
                         johnGhost.transform.position = johnsNextPosition;
                         ManagerGame.ghostMoved = true;
-                        ManagerGame.zombieMove = true;
                         state = State.Right;
                         touchPad.transform.position = johnGhost.transform.position;
                         touchPad.SetActive(false);
@@ -84,7 +86,6 @@ public class ManagerCharacter : MonoBehaviour
                         johnsNextPosition.x -= movePixel;
                         johnGhost.transform.position = johnsNextPosition;
                         ManagerGame.ghostMoved = true;
-                        ManagerGame.zombieMove = true;
                         state = State.Left;
                         touchPad.transform.position = johnGhost.transform.position;
                         touchPad.SetActive(false);
@@ -95,7 +96,6 @@ public class ManagerCharacter : MonoBehaviour
                         johnsNextPosition.y += movePixel;
                         johnGhost.transform.position = johnsNextPosition;
                         ManagerGame.ghostMoved = true;
-                        ManagerGame.zombieMove = true;
                         state = State.Up;
                         touchPad.transform.position = johnGhost.transform.position;
                         touchPad.SetActive(false);
@@ -106,42 +106,71 @@ public class ManagerCharacter : MonoBehaviour
                         johnsNextPosition.y -= movePixel;
                         johnGhost.transform.position = johnsNextPosition;
                         ManagerGame.ghostMoved = true;
-                        ManagerGame.zombieMove = true;
                         state = State.Down;
                         touchPad.transform.position = johnGhost.transform.position;
                         touchPad.SetActive(false);
                     }
                     else if (tag == "Mid")
                     {
-                        //Debug.Log("Mid");
-                        johnGhost.transform.position = johnsNextPosition;
-                        ManagerGame.ghostMoved = true;
-                        ManagerGame.zombieMove = true;
-                        state = State.Idle;
-                        touchPad.transform.position = johnGhost.transform.position;
+                        ////Debug.Log("Mid");
+                        //johnGhost.transform.position = johnsNextPosition;
+                        //ManagerGame.ghostMoved = true;
+                        //state = State.Idle;
+                        //touchPad.transform.position = johnGhost.transform.position;
                         //touchPad.SetActive(false);
+                        Mid();
                     }
                 }
             }
         }
     }
 
+    public void Mid()
+    {
+        johnsNextPosition = transform.position;
+        prevPosition = transform.position;
+        johnGhost.transform.position = johnsNextPosition;
+        ManagerGame.ghostMoved = true;
+        state = State.Idle;
+        touchPad.transform.position = johnGhost.transform.position;
+        touchPad.SetActive(false);
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        if (coll.gameObject.tag == "Tile_Rock" || coll.gameObject.tag == "Tile_Sea")
+        {
+            johnGhost.transform.position = prevPosition;
+            transform.position = prevPosition;
+            touchPad.transform.position = prevPosition;
+        }
+        else if (coll.gameObject.tag == "Item_Apple")
+        {
+            ManagerGame.john_hp += 20;
+            if (ManagerGame.john_hp > 100)
+                ManagerGame.john_hp = 100;
+            Debug.Log("Apple");
+            Debug.Log(ManagerGame.john_hp);
+            coll.gameObject.SetActive(false);
+        }
+
+    }
+
 
     /** For Animation State **/
     void Idle()
     {
+
         ManagerGame.ghostMoved = false;
-        ManagerGame.zombieMove = false;
+
         //ManagerGame.moveOn = false;
-        //touchPad.SetActive(true);
+        touchPad.SetActive(true);
     }
 
     void Right()
     {
-        rigidbody2D.velocity = Vector2.right * moveSpeed;
-        if (Vector2.Distance(transform.position, johnGhost.transform.position) <= 0.1f)
+        if (MoveUtil.MoveByFrame(transform, johnGhost.transform.position, moveSpeed) == 0.0f)
         {
-            rigidbody2D.velocity = Vector2.zero;
             transform.position = johnGhost.transform.position;
             state = State.Idle;
             touchPad.SetActive(true);
@@ -151,10 +180,8 @@ public class ManagerCharacter : MonoBehaviour
 
     void Left()
     {
-        rigidbody2D.velocity = Vector2.left * moveSpeed;
-        if (Vector2.Distance(transform.position, johnGhost.transform.position) <= 0.1f)
+        if (MoveUtil.MoveByFrame(transform, johnGhost.transform.position, moveSpeed) == 0.0f)
         {
-            rigidbody2D.velocity = Vector2.zero;
             transform.position = johnGhost.transform.position;
             state = State.Idle;
             touchPad.SetActive(true);
@@ -164,10 +191,8 @@ public class ManagerCharacter : MonoBehaviour
 
     void Up()
     {
-        rigidbody2D.velocity = Vector2.up * moveSpeed;
-        if (Vector2.Distance(transform.position, johnGhost.transform.position) <= 0.1f)
+        if (MoveUtil.MoveByFrame(transform, johnGhost.transform.position, moveSpeed) == 0.0f)
         {
-            rigidbody2D.velocity = Vector2.zero;
             transform.position = johnGhost.transform.position;
             state = State.Idle;
             touchPad.SetActive(true);
@@ -177,10 +202,8 @@ public class ManagerCharacter : MonoBehaviour
 
     void Down()
     {
-        rigidbody2D.velocity = Vector2.down * moveSpeed;
-        if (Vector2.Distance(transform.position, johnGhost.transform.position) <= 0.1f)
+        if (MoveUtil.MoveByFrame(transform, johnGhost.transform.position, moveSpeed) == 0.0f)
         {
-            rigidbody2D.velocity = Vector2.zero;
             transform.position = johnGhost.transform.position;
             state = State.Idle;
             touchPad.SetActive(true);

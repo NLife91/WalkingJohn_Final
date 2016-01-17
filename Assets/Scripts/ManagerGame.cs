@@ -4,7 +4,9 @@ using System.Collections;
 public class ManagerGame : MonoBehaviour
 {
     public static bool ghostMoved = false;
-    public static bool zombieMove = false;
+    public static bool zombieMoved = false;
+
+    public static ArrayList zombieList = new ArrayList();
 
     public static int gamePhase = 0;
 
@@ -16,7 +18,6 @@ public class ManagerGame : MonoBehaviour
     GameObject gameStartUI;
 
     public GameObject johnGhost;
-
 
     // Use this for initialization
     void Start()
@@ -32,6 +33,15 @@ public class ManagerGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        zombieMoved = false;
+        foreach (GameObject zombie in zombieList)
+        {
+            if (zombie.GetComponent<CharacterZombie>().isMoving == true)
+            {
+                zombieMoved = true;
+            }
+        }
+
         if (gamePhase == 0 && Input.GetMouseButtonDown(0))
         {
             gameStartUI.SetActive(false);
@@ -58,6 +68,7 @@ public class ManagerGame : MonoBehaviour
     public static void DestroyAll()
     {
         Destroy(GameObject.Find("Map"));
+        zombieList.Clear();
     }
 
     // Empty Object "Map"만들기

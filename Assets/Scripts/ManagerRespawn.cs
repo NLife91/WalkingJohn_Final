@@ -33,7 +33,6 @@ public class ManagerRespawn : MonoBehaviour
     //public float moveSpeed = 1.0f;
     public State state = State.level_1;
 
-    public GameObject John;
     public GameObject johnGhost;
     public GameObject map_zombie;
     public GameObject map_apple;
@@ -47,85 +46,6 @@ public class ManagerRespawn : MonoBehaviour
 
     private GameObject _character_zombie;
     private GameObject _item_apple;
-
-
-    //public Transform position;
-
-    /*
-    if (Input.GetMouseButtonDown(0))
-        {
-            ManagerGame.ghostMoved = false;
-            ManagerGame.moveOn = false;
-
-            Vector2 wp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    Ray2D ray = new Ray2D(wp, Vector2.zero);
-
-    RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 10000f, _layermask);
-
-            if(hit.collider != null)
-            {
-                int layer = hit.transform.gameObject.layer;
-
-                if (layer == LayerMask.NameToLayer("TouchPad"))
-                {
-                    string tag = hit.transform.gameObject.tag;
-
-    Vector2 johnsNextPosition = transform.position;
-
-                    if (tag == "Right")
-                    {
-                        //Debug.Log("Right");
-                        johnsNextPosition.x += movePixel;
-                        johnGhost.transform.position = johnsNextPosition;
-                        ManagerGame.ghostMoved = true;
-                        state = State.Right;
-                        touchPad.transform.position = johnGhost.transform.position;
-                        touchPad.SetActive(false);
-                    }
-                    else if (tag == "Left")
-                    {
-                        // Debug.Log("Left");
-                        johnsNextPosition.x -= movePixel;
-                        johnGhost.transform.position = johnsNextPosition;
-                        ManagerGame.ghostMoved = true;
-                        state = State.Left;
-                        touchPad.transform.position = johnGhost.transform.position;
-                        touchPad.SetActive(false);
-                    }
-                    else if (tag == "Up")
-                    {
-                        //Debug.Log("Up");
-                        johnsNextPosition.y += movePixel;
-                        johnGhost.transform.position = johnsNextPosition;
-                        ManagerGame.ghostMoved = true;
-                        state = State.Up;
-                        touchPad.transform.position = johnGhost.transform.position;
-                        touchPad.SetActive(false);
-                    }
-                    else if (tag == "Down")
-                    {
-                        //Debug.Log("Down");
-                        johnsNextPosition.y -= movePixel;
-                        johnGhost.transform.position = johnsNextPosition;
-                        ManagerGame.ghostMoved = true;
-                        state = State.Down;
-                        touchPad.transform.position = johnGhost.transform.position;
-                        touchPad.SetActive(false);
-                    }
-                    else if (tag == "Mid")
-                    {
-                        //Debug.Log("Mid");
-                        johnGhost.transform.position = johnsNextPosition;
-                        ManagerGame.ghostMoved = true;
-                        state = State.Idle;
-                        touchPad.transform.position = johnGhost.transform.position;
-                        //touchPad.SetActive(false);
-                    }
-                }
-            }
-        }
-    
-    */
 
     void Awake()
     {
@@ -172,8 +92,9 @@ public class ManagerRespawn : MonoBehaviour
                 Debug.Log("shit");
                 // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
                 map_zombie.transform.parent = GameObject.Find("Map").transform;
-                // 뻘짓 리스폰매니저가 가지고 있는 존을 좀비에게 붙임 되나?
-                //map_zombie.GetComponent<CharacterZombie>().john = John;
+                // 리스폰매니저가 가지고 있는 존을 좀비에게 붙임
+                map_zombie.GetComponent<CharacterZombie>().johnGhost = johnGhost;
+                ManagerGame.zombieList.Add(map_zombie);
 
             }
 

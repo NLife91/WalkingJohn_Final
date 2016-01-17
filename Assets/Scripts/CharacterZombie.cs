@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CharacterZombie : MonoBehaviour 
+public class CharacterZombie : MonoBehaviour
 {
     public enum State
     {
@@ -9,27 +9,32 @@ public class CharacterZombie : MonoBehaviour
     }
 
     public float movePixel = 1f;
-    public float moveSpeed = 1.2f;
+    public float moveSpeed = 2f;
     public State state = State.Idle;
 
     [HideInInspector]
     public new Transform transform;
     private Animator _animator;
 
-    public GameObject john; // 나중에 private로 만들어야됨. 리스폰매니저가 좀비 생성할때 johnGhost가지고 있다가 대입해주어야함
+    public GameObject johnGhost; // 나중에 private로 만들어야됨. 리스폰매니저가 좀비 생성할때 johnGhostGhost가지고 있다가 대입해주어야함
     private Vector2 prevPosition;
     private Vector2 nextPosition;
-
+    public float range = 5f;
 
     private new Rigidbody2D rigidbody2D;
     private bool isCalcued;
+    public bool isMoving;
+    public float r = 6f;
+
     void Awake()
     {
         transform = GetComponent<Transform>();
+        prevPosition = transform.position;
         nextPosition = transform.position;
         //_animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
         isCalcued = false;
+        isMoving = false;
     }
 
     void Update()
@@ -38,7 +43,7 @@ public class CharacterZombie : MonoBehaviour
             return;
         else if (state == State.Idle)
         {
-            if (ManagerGame.zombieMove != true)
+            if (isMoving != true && ManagerGame.ghostMoved != true)
                 isCalcued = false;
         }
 
@@ -46,25 +51,26 @@ public class CharacterZombie : MonoBehaviour
         {
             ProcessNextPosition();
         }
-        else if (ManagerGame.zombieMove == true && isCalcued == true)
+        else if (isMoving == true && isCalcued == true)
         {
             Invoke(state.ToString(), 0.0f);
         }
     }
-    
+
     void ProcessNextPosition()
     {
+        prevPosition = transform.position;
         float tx = transform.position.x;
         float ty = transform.position.y;
-        float jx = john.transform.position.x;
-        float jy = john.transform.position.y;
+        float jx = johnGhost.transform.position.x;
+        float jy = johnGhost.transform.position.y;
         float distanceX = Mathf.Abs(tx - jx);
         float distanceY = Mathf.Abs(ty - jy);
         Vector2 next = transform.position;
 
-        float r = Mathf.Sqrt(distanceX * distanceX + distanceY * distanceY);
+        r = Mathf.Sqrt(distanceX * distanceX + distanceY * distanceY);
 
-        if (r <= 1f)
+        if (r <= range)
         {
             if (distanceX < distanceY)
             {
@@ -100,21 +106,118 @@ public class CharacterZombie : MonoBehaviour
                     state = State.Left;
                 }
             }
-        }
-        else
-        {
+            else // distanceX == distanceY 정사각형
+            {
+                int selectNumber = Random.Range(0, 2);
 
+                if (ty > jy)
+                {
+                    if (tx > jx)
+                    {
+                        if (selectNumber == 0)
+                        {
+                            // <
+                            next.x -= movePixel;
+                            nextPosition = next;
+                            state = State.Left;
+                        }
+                        else if (selectNumber == 1)
+                        {
+                            // v
+                            next.y -= movePixel;
+                            nextPosition = next;
+                            state = State.Down;
+                        }
+                    }
+                    else
+                    {
+                        if (selectNumber == 0)
+                        {
+                            // > 
+                            next.x += movePixel;
+                            nextPosition = next;
+                            state = State.Right;
+                        }
+                        else if (selectNumber == 1)
+                        {
+                            // v
+                            next.y -= movePixel;
+                            nextPosition = next;
+                            state = State.Down;
+                        }
+                    }
+                }
+                else
+                {
+                    if (tx > jx)
+                    {
+                        if (selectNumber == 0)
+                        {
+                            // <
+                            next.x -= movePixel;
+                            nextPosition = next;
+                            state = State.Left;
+                        }
+                        else if (selectNumber == 1)
+                        {
+                            // ^
+                            next.y += movePixel;
+                            nextPosition = next;
+                            state = State.Up;
+                        }
+                    }
+                    else
+                    {
+                        if (selectNumber == 0)
+                        {
+                            // > 
+                            next.x += movePixel;
+                            nextPosition = next;
+                            state = State.Right;
+                        }
+                        else if (selectNumber == 1)
+                        {
+                            // ^
+                            next.y += movePixel;
+                            nextPosition = next;
+                            state = State.Up;
+                        }
+                    }
+                }
+            }
         }
 
+
+        isMoving = true;
+        //ManagerGame.zombieMove = true;
         isCalcued = true;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnCollisionEnter2D(Collision2D coll)
     {
-        if (other.gameObject.tag == "JohnGhost")
+        if (coll.gameObject.tag == "JohnGhost")
         {
             Debug.Log("PlayerCollision");
-            Destroy(this.gameObject);
+            ManagerGame.john_hp -= 10;
+            Debug.Log(ManagerGame.john_hp);
+            state = State.Idle;
+            isMoving = false;
+            GetComponent<BoxCollider2D>().gameObject.SetActive(false);
+        }
+        else if (coll.gameObject.tag == "Zombie")
+        {
+            if (r > coll.gameObject.GetComponent<CharacterZombie>().r)
+            {
+                nextPosition = prevPosition;
+                transform.position = prevPosition;
+                //state = State.Idle;
+                //isMoving = false;
+            }
+        }
+        else if (coll.gameObject.tag == "Tile_Rock" || coll.gameObject.tag == "Tile_Sea")
+        {
+            nextPosition = prevPosition;
+            transform.position = prevPosition;
         }
 
     }
@@ -122,62 +225,59 @@ public class CharacterZombie : MonoBehaviour
     /** For Animation State **/
     void Idle()
     {
-        
+        //ManagerGame.zombieMove = false;
+        isMoving = false;
+        isCalcued = false;
     }
 
     void Right()
     {
-        rigidbody2D.velocity = Vector2.right * moveSpeed;
-        Debug.Log(Vector2.Distance(transform.position, nextPosition));
-        if (Vector2.Distance(transform.position, nextPosition) <= 1f)
+        if (MoveUtil.MoveByFrame(transform, nextPosition, moveSpeed) == 0.0f)
         {
-
-            rigidbody2D.velocity = Vector2.zero;
             transform.position = nextPosition;
             state = State.Idle;
+            isMoving = false;
+            //ManagerGame.zombieMove = false;
+            isCalcued = false;
             return;
         }
     }
 
     void Left()
     {
-        rigidbody2D.velocity = Vector2.left * moveSpeed;
-        Debug.Log(Vector2.Distance(transform.position, nextPosition));
-
-        if (Vector2.Distance(transform.position, nextPosition) <= 1f)
+        if (MoveUtil.MoveByFrame(transform, nextPosition, moveSpeed) == 0.0f)
         {
-
-            rigidbody2D.velocity = Vector2.zero;
             transform.position = nextPosition;
             state = State.Idle;
+            isMoving = false;
+            //ManagerGame.zombieMove = false;
+            isCalcued = false;
             return;
         }
     }
 
     void Up()
     {
-        rigidbody2D.velocity = Vector2.up * moveSpeed;
-        Debug.Log(Vector2.Distance(transform.position, nextPosition));
-        if (Vector2.Distance(transform.position, nextPosition) <= 1f)
+        if (MoveUtil.MoveByFrame(transform, nextPosition, moveSpeed) == 0.0f)
         {
-
-            rigidbody2D.velocity = Vector2.zero;
             transform.position = nextPosition;
             state = State.Idle;
+            isMoving = false;
+            //ManagerGame.zombieMove = false;
+            isCalcued = false;
             return;
         }
     }
 
     void Down()
     {
-        rigidbody2D.velocity = Vector2.down * moveSpeed;
-        Debug.Log(Vector2.Distance(transform.position, nextPosition));
-        if (Vector2.Distance(transform.position, nextPosition) <= 1f)
+        if (MoveUtil.MoveByFrame(transform, nextPosition, moveSpeed) == 0.0f)
         {
-
-            rigidbody2D.velocity = Vector2.zero;
             transform.position = nextPosition;
             state = State.Idle;
+            isMoving = false;
+            //ManagerGame.zombieMove = false;
+            isCalcued = false;
             return;
         }
     }
