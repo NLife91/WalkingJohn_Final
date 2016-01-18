@@ -162,31 +162,12 @@ public class ManagerCharacter : MonoBehaviour
         }
         else if (coll.gameObject.tag == "Item_Apple")
         {
-            //Score + 300
-            ManagerGame.john_score += 300;
-            Debug.Log("john_score = " + ManagerGame.john_score);
-
-            //게이지(HP) +20
-            if (ManagerGame.john_hp + ManagerGame.appleValue >= 100)
-            {
-
-                UI_HPGauge.HPPlus(ManagerGame.appleValue); // ManagerGame.john_hp = 100 
-                                                           // & HP게이지 사이즈 1로 조정
-
-                //메세지Test
-                Debug.Log("Apple먹음 - Full HP // ManagerGame.john_hp : " + ManagerGame.john_hp);
-
-                //부딪힌 오브젝트 끔
-                coll.gameObject.SetActive(false);
-            }
-            else // 더해도 Full HP 아닐 때
-            {
-                UI_HPGauge.HPPlus(ManagerGame.appleValue); // ManagerGame.john_hp + 20 
-                                                           // & HP게이지 사이즈 조정
-                //메세지Test
-                Debug.Log("Apple먹음 // ManagerGame.john_hp : " + ManagerGame.john_hp);
-                coll.gameObject.SetActive(false);
-            }
+            ManagerGame.john_hp += 20;
+            if (ManagerGame.john_hp > 100)
+                ManagerGame.john_hp = 100;
+            Debug.Log("Apple");
+            Debug.Log(ManagerGame.john_hp);
+            coll.gameObject.SetActive(false);
         }
 
     }

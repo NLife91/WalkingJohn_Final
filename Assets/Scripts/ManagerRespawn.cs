@@ -47,6 +47,8 @@ public class ManagerRespawn : MonoBehaviour
     private GameObject _character_zombie;
     private GameObject _item_apple;
 
+    public GameObject touchPad;
+
     void Awake()
     {
         transform = GetComponent<Transform>();
@@ -64,7 +66,9 @@ public class ManagerRespawn : MonoBehaviour
 
         if (ManagerGame.gamePhase == 2)
         {
+            touchPad.SetActive(true);
             ProcessInput();
+            
             ManagerGame.gamePhase = 3;
         }
     }
@@ -88,12 +92,11 @@ public class ManagerRespawn : MonoBehaviour
 
                 map_zombie = Instantiate(Resources.Load("Prefabs/Character_Zombie"), johnGhost.transform.position +
                     new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity) as GameObject;
-
-                Debug.Log("shit");
+                
                 // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
                 map_zombie.transform.parent = GameObject.Find("Map").transform;
                 // 리스폰매니저가 가지고 있는 존을 좀비에게 붙임
-                map_zombie.GetComponent<CharacterZombie>().johnGhost = johnGhost;
+                map_zombie.gameObject.GetComponent<CharacterZombie>().johnGhost = johnGhost;
                 ManagerGame.zombieList.Add(map_zombie);
 
             }
@@ -120,6 +123,9 @@ public class ManagerRespawn : MonoBehaviour
 
                 // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
                 map_zombie.transform.parent = GameObject.Find("Map").transform;
+                // 리스폰매니저가 가지고 있는 존을 좀비에게 붙임
+                map_zombie.gameObject.GetComponent<CharacterZombie>().johnGhost = johnGhost;
+                ManagerGame.zombieList.Add(map_zombie);
             }
 
             for (int i = 0; i < balence_level_2_appleResNum; i++)
@@ -144,6 +150,9 @@ public class ManagerRespawn : MonoBehaviour
 
                 // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
                 map_zombie.transform.parent = GameObject.Find("Map").transform;
+                // 리스폰매니저가 가지고 있는 존을 좀비에게 붙임
+                map_zombie.gameObject.GetComponent<CharacterZombie>().johnGhost = johnGhost;
+                ManagerGame.zombieList.Add(map_zombie);
             }
 
             for (int i = 0; i < balence_level_3_appleResNum; i++)

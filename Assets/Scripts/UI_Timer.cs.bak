@@ -28,13 +28,9 @@ public class UI_Timer : MonoBehaviour
 
     void Update()
     {
- 		//if(//게임 시작 되면 타이머가 시작되게)
-        {        }
-
         Timer();
-        
-        
-	}
+        //ShowTimeLeft();
+    }
 
     // Time이 0으로 줄어드는 것
     void Timer()

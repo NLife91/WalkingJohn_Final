@@ -26,6 +26,8 @@ public class CharacterZombie : MonoBehaviour
     public bool isMoving;
     public float r = 6f;
 
+    public int zombieValue = 10;
+
     void Awake()
     {
         transform = GetComponent<Transform>();
@@ -198,8 +200,12 @@ public class CharacterZombie : MonoBehaviour
         if (coll.gameObject.tag == "JohnGhost")
         {
             Debug.Log("PlayerCollision");
-            ManagerGame.john_hp -= 10;
-            Debug.Log(ManagerGame.john_hp);
+            UI_HPGauge.HPDamage(zombieValue); // ManagerGame.john_hp -= zombieValue;
+                                              // HP 게이지 조작
+                                              //메세지Test
+            Debug.Log("Zombie 부딪혀서 HP깎임 - ManagerGame.john_hp = "
+                        + ManagerGame.john_hp);
+
             state = State.Idle;
             isMoving = false;
             GetComponent<BoxCollider2D>().gameObject.SetActive(false);
