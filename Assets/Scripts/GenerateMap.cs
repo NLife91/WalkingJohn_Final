@@ -94,13 +94,13 @@ public class GenerateMap : MonoBehaviour
                 {
                     CreateRock(new Vector3(x_pos + 0.5f, tilePoint[j], 0));
 
-                    Debug.Log(new Vector3(x_pos + 0.5f, tilePoint[j], 0) + "에 돌 만듦");
+                    //Debug.Log(new Vector3(x_pos + 0.5f, tilePoint[j], 0) + "에 돌 만듦");
                 }
                 else
                 {
                     CreateSea(new Vector3(x_pos + 0.5f, tilePoint[j], 0));
 
-                    Debug.Log(new Vector3(x_pos + 0.5f, tilePoint[j], 0) + "에 바다 만듦");
+                    //Debug.Log(new Vector3(x_pos + 0.5f, tilePoint[j], 0) + "에 바다 만듦");
                 }
 
                 //Debug.Log(generatePoint);

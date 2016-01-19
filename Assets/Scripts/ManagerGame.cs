@@ -7,6 +7,7 @@ public class ManagerGame : MonoBehaviour
     public static bool zombieMoved = false;
 
     public static ArrayList zombieList = new ArrayList();
+    public static ArrayList bombList = new ArrayList();
 
     public static int gamePhase = 0;
 
@@ -20,7 +21,7 @@ public class ManagerGame : MonoBehaviour
     public static int zombieScore = 200; //좀비를 죽이면
     //public static int appleScore = 300; //사과를 먹으면
 
-    //Value
+    //Value : 체력 채워지는 값
     public static int appleValue = 20;
 
     GameObject gameOverUI;
@@ -59,6 +60,7 @@ public class ManagerGame : MonoBehaviour
         if (gamePhase == 0 && Input.GetMouseButtonDown(0))
         {
             gameStartUI.SetActive(false);
+            touchPad.SetActive(true);
             gamePhase = 1;
         }
         else if (gamePhase != 9 && john_hp <= 0)

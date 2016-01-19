@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class ManagerRespawn : MonoBehaviour
 {
@@ -8,8 +7,8 @@ public class ManagerRespawn : MonoBehaviour
         level_1, level_2, level_3
     }
 
-    public int[,] tile_index =
-        new int[,] { { 0, 0, 0 }, { 0, 1, 0 }, { 1, 0, 0 }, { 0, -1, 0 },
+    public float[,] tile_index =
+        new float[,] { { 0, 0, 0 }, { 0, 1, 0 }, { 1, 0, 0 }, { 0, -1, 0 },
             { -1, 0, 0 }, { 0, 2, 0 }, { 1, 1, 0 }, { 2, 0, 0 },
             { 1, -1, 0 }, { 0, -2, 0 }, { -1, -1, 0 }, { -2, 0, 0 },
             { -1, 1, 0 }, { 0, 3, 0 }, { 1, 2, 0 }, { 2, 1, 0 },
@@ -36,6 +35,7 @@ public class ManagerRespawn : MonoBehaviour
     public GameObject johnGhost;
     public GameObject map_zombie;
     public GameObject map_apple;
+    public GameObject map_bomb;
 
     [HideInInspector]
     public new Transform transform;
@@ -48,6 +48,8 @@ public class ManagerRespawn : MonoBehaviour
     private GameObject _item_apple;
 
     public GameObject touchPad;
+
+    public Vector3 resPos;
 
     void Awake()
     {
@@ -66,11 +68,25 @@ public class ManagerRespawn : MonoBehaviour
 
         if (ManagerGame.gamePhase == 2)
         {
-            touchPad.SetActive(true);
+            //touchPad.SetActive(true);
             ProcessInput();
             
             ManagerGame.gamePhase = 3;
         }
+    }
+
+    public bool tileCheck(float x, float y)
+    {
+        
+        foreach (Transform child in GameObject.Find("Map").transform)
+        {
+            //child is your child transform
+            //Debug.Log(child.transform.position.x + ", " + child.transform.position.y);
+            if (child.transform.position.x == x && child.transform.position.y == y)
+                return false;
+        }
+        
+        return true;
     }
 
     public void ProcessInput()
@@ -83,15 +99,45 @@ public class ManagerRespawn : MonoBehaviour
             state = State.level_3;
 
         int selectedTile = 0;
+        int bombChance = 0;
+
+        
+        bombChance = Random.Range(1, 10);
+        selectedTile = Random.Range(1, 24);
+        Random.seed = (int)System.DateTime.Now.Ticks * 10;
+
+        if (bombChance >= 6)
+        {
+            resPos = johnGhost.transform.position +
+                new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]);
+
+            if (tileCheck(resPos.x, resPos.y))
+            {
+                map_bomb = Instantiate(Resources.Load("Prefabs/Item_Mine"), resPos, Quaternion.identity) as GameObject;
+
+                // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
+                map_bomb.transform.parent = GameObject.Find("Map").transform;
+            }
+
+            
+        }
+        
+
 
         if (state == State.level_1)
         {
             for (int i = 0; i < balence_level_1_zombieResNum; i++)
             {
+                Random.seed = (int)System.DateTime.Now.Ticks;
                 selectedTile = Random.Range(13, 24);
 
-                map_zombie = Instantiate(Resources.Load("Prefabs/Character_Zombie"), johnGhost.transform.position +
-                    new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity) as GameObject;
+                resPos = johnGhost.transform.position +
+                new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]);
+
+                if (!tileCheck(resPos.x, resPos.y))
+                    break;
+               
+                map_zombie = Instantiate(Resources.Load("Prefabs/Character_Zombie"), resPos, Quaternion.identity) as GameObject;
                 
                 // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
                 map_zombie.transform.parent = GameObject.Find("Map").transform;
@@ -103,10 +149,16 @@ public class ManagerRespawn : MonoBehaviour
 
             for (int i = 0; i < balence_level_1_appleResNum; i++)
             {
+                Random.seed = (int)System.DateTime.Now.Ticks*2;
                 selectedTile = Random.Range(13, 24);
 
-                map_apple = Instantiate(Resources.Load("Prefabs/Item_apple"), johnGhost.transform.position +
-                    new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity) as GameObject;
+                resPos = johnGhost.transform.position +
+                new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]);
+
+                if (!tileCheck(resPos.x, resPos.y))
+                    break;
+
+                map_apple = Instantiate(Resources.Load("Prefabs/Item_apple"), resPos, Quaternion.identity) as GameObject;
 
                 // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
                 map_apple.transform.parent = GameObject.Find("Map").transform;
@@ -116,10 +168,16 @@ public class ManagerRespawn : MonoBehaviour
         {
             for (int i = 0; i < balence_level_2_zombieResNum; i++)
             {
+                Random.seed = (int)System.DateTime.Now.Ticks*3;
                 selectedTile = Random.Range(5, 24);
 
-                map_zombie = Instantiate(Resources.Load("Prefabs/Character_Zombie"), johnGhost.transform.position +
-                    new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity) as GameObject;
+                resPos = johnGhost.transform.position +
+                new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]);
+
+                if (!tileCheck(resPos.x, resPos.y))
+                    break;
+
+                map_zombie = Instantiate(Resources.Load("Prefabs/Character_Zombie"), resPos, Quaternion.identity) as GameObject;
 
                 // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
                 map_zombie.transform.parent = GameObject.Find("Map").transform;
@@ -130,10 +188,16 @@ public class ManagerRespawn : MonoBehaviour
 
             for (int i = 0; i < balence_level_2_appleResNum; i++)
             {
-                selectedTile = Random.Range(13, 24);
+                Random.seed = (int)System.DateTime.Now.Ticks*4;
+                selectedTile = Random.Range(5, 24);
 
-                map_apple = Instantiate(Resources.Load("Prefabs/Item_apple"), johnGhost.transform.position +
-                    new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity) as GameObject;
+                resPos = johnGhost.transform.position +
+                new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]);
+
+                if (!tileCheck(resPos.x, resPos.y))
+                    break;
+
+                map_apple = Instantiate(Resources.Load("Prefabs/Item_apple"), resPos, Quaternion.identity) as GameObject;
 
                 // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
                 map_apple.transform.parent = GameObject.Find("Map").transform;
@@ -143,10 +207,16 @@ public class ManagerRespawn : MonoBehaviour
         {
             for (int i = 0; i < balence_level_3_zombieResNum; i++)
             {
-                selectedTile = Random.Range(1, 24);
+                Random.seed = (int)System.DateTime.Now.Ticks*5;
+                selectedTile = Random.Range(5, 24);
 
-                map_zombie = Instantiate(Resources.Load("Prefabs/Character_Zombie"), johnGhost.transform.position +
-                     new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity) as GameObject;
+                resPos = johnGhost.transform.position +
+                new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]);
+
+                if (!tileCheck(resPos.x, resPos.y))
+                    break;
+
+                map_zombie = Instantiate(Resources.Load("Prefabs/Character_Zombie"), resPos, Quaternion.identity) as GameObject;
 
                 // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
                 map_zombie.transform.parent = GameObject.Find("Map").transform;
@@ -157,10 +227,16 @@ public class ManagerRespawn : MonoBehaviour
 
             for (int i = 0; i < balence_level_3_appleResNum; i++)
             {
-                selectedTile = Random.Range(13, 24);
+                Random.seed = (int)System.DateTime.Now.Ticks*6;
+                selectedTile = Random.Range(5, 24);
 
-                map_apple = Instantiate(Resources.Load("Prefabs/Item_apple"), johnGhost.transform.position +
-                    new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]), Quaternion.identity) as GameObject;
+                resPos = johnGhost.transform.position +
+                new Vector3(tile_index[selectedTile, 0], tile_index[selectedTile, 1], tile_index[selectedTile, 2]);
+
+                if (!tileCheck(resPos.x, resPos.y))
+                    break;
+
+                map_apple = Instantiate(Resources.Load("Prefabs/Item_apple"), resPos, Quaternion.identity) as GameObject;
 
                 // rock tile 생성한 것을 Map오브젝트의 Child로 넣자
                 map_apple.transform.parent = GameObject.Find("Map").transform;

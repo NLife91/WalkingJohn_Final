@@ -3,14 +3,14 @@ using System.Collections;
 
 public class CharacterZombie : MonoBehaviour
 {
-    public enum State
+    public enum Zombie_Movement
     {
-        Idle, Right, Left, Up, Down, Dead
+        zombie_right_idle = 1, zombie_left_idle, zombie_back_idle, zombie_forward_idle, zombie_right = 11, zombie_left = 22, zombie_back = 33, zombie_forward = 44, zombie_dead
     }
 
     public float movePixel = 1f;
     public float moveSpeed = 2f;
-    public State state = State.Idle;
+    public Zombie_Movement zombie_movement = Zombie_Movement.zombie_forward_idle;
 
     [HideInInspector]
     public new Transform transform;
@@ -33,7 +33,7 @@ public class CharacterZombie : MonoBehaviour
         transform = GetComponent<Transform>();
         prevPosition = transform.position;
         nextPosition = transform.position;
-        //_animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
         rigidbody2D = GetComponent<Rigidbody2D>();
         isCalcued = false;
         isMoving = false;
@@ -41,9 +41,9 @@ public class CharacterZombie : MonoBehaviour
 
     void Update()
     {
-        if (state == State.Dead)
+        if (zombie_movement == Zombie_Movement.zombie_dead)
             return;
-        else if (state == State.Idle)
+        else if (zombie_movement == Zombie_Movement.zombie_back_idle || zombie_movement == Zombie_Movement.zombie_forward_idle || zombie_movement == Zombie_Movement.zombie_right_idle || zombie_movement == Zombie_Movement.zombie_left_idle)
         {
             if (isMoving != true && ManagerGame.ghostMoved != true)
                 isCalcued = false;
@@ -55,7 +55,7 @@ public class CharacterZombie : MonoBehaviour
         }
         else if (isMoving == true && isCalcued == true)
         {
-            Invoke(state.ToString(), 0.0f);
+            Invoke(zombie_movement.ToString(), 0.0f);
         }
     }
 
@@ -81,14 +81,14 @@ public class CharacterZombie : MonoBehaviour
                     // ^
                     next.y += movePixel;
                     nextPosition = next;
-                    state = State.Up;
+                    zombie_movement = Zombie_Movement.zombie_back;
                 }
                 else
                 {
                     // v
                     next.y -= movePixel;
                     nextPosition = next;
-                    state = State.Down;
+                    zombie_movement = Zombie_Movement.zombie_forward;
                 }
             }
             else if (distanceX > distanceY)
@@ -98,14 +98,14 @@ public class CharacterZombie : MonoBehaviour
                     // >
                     next.x += movePixel;
                     nextPosition = next;
-                    state = State.Right;
+                    zombie_movement = Zombie_Movement.zombie_right;
                 }
                 else
                 {
                     // <
                     next.x -= movePixel;
                     nextPosition = next;
-                    state = State.Left;
+                    zombie_movement = Zombie_Movement.zombie_left;
                 }
             }
             else // distanceX == distanceY 정사각형
@@ -121,14 +121,14 @@ public class CharacterZombie : MonoBehaviour
                             // <
                             next.x -= movePixel;
                             nextPosition = next;
-                            state = State.Left;
+                            zombie_movement = Zombie_Movement.zombie_left;
                         }
                         else if (selectNumber == 1)
                         {
                             // v
                             next.y -= movePixel;
                             nextPosition = next;
-                            state = State.Down;
+                            zombie_movement = Zombie_Movement.zombie_back;
                         }
                     }
                     else
@@ -138,14 +138,14 @@ public class CharacterZombie : MonoBehaviour
                             // > 
                             next.x += movePixel;
                             nextPosition = next;
-                            state = State.Right;
+                            zombie_movement = Zombie_Movement.zombie_right;
                         }
                         else if (selectNumber == 1)
                         {
                             // v
                             next.y -= movePixel;
                             nextPosition = next;
-                            state = State.Down;
+                            zombie_movement = Zombie_Movement.zombie_forward;
                         }
                     }
                 }
@@ -158,14 +158,14 @@ public class CharacterZombie : MonoBehaviour
                             // <
                             next.x -= movePixel;
                             nextPosition = next;
-                            state = State.Left;
+                            zombie_movement = Zombie_Movement.zombie_left;
                         }
                         else if (selectNumber == 1)
                         {
                             // ^
                             next.y += movePixel;
                             nextPosition = next;
-                            state = State.Up;
+                            zombie_movement = Zombie_Movement.zombie_back;
                         }
                     }
                     else
@@ -175,21 +175,21 @@ public class CharacterZombie : MonoBehaviour
                             // > 
                             next.x += movePixel;
                             nextPosition = next;
-                            state = State.Right;
+                            zombie_movement = Zombie_Movement.zombie_right;
                         }
                         else if (selectNumber == 1)
                         {
                             // ^
                             next.y += movePixel;
                             nextPosition = next;
-                            state = State.Up;
+                            zombie_movement = Zombie_Movement.zombie_back;
                         }
                     }
                 }
             }
         }
 
-
+        _animator.SetInteger("zombie_movement", (int)zombie_movement);
         isMoving = true;
         //ManagerGame.zombieMove = true;
         isCalcued = true;
@@ -200,13 +200,16 @@ public class CharacterZombie : MonoBehaviour
         if (coll.gameObject.tag == "JohnGhost")
         {
             Debug.Log("PlayerCollision");
+            CameraRigScript.ShakeCamera(0.2f, 0.2f);
+
             UI_HPGauge.HPDamage(zombieValue); // ManagerGame.john_hp -= zombieValue;
                                               // HP 게이지 조작
                                               //메세지Test
             Debug.Log("Zombie 부딪혀서 HP깎임 - ManagerGame.john_hp = "
                         + ManagerGame.john_hp);
+            ShowMessage2.ShowMessage_Zombie();
 
-            state = State.Idle;
+            zombie_movement = Zombie_Movement.zombie_forward_idle;
             isMoving = false;
             GetComponent<BoxCollider2D>().gameObject.SetActive(false);
         }
@@ -229,19 +232,38 @@ public class CharacterZombie : MonoBehaviour
     }
 
     /** For Animation State **/
-    void Idle()
+
+    void zombie_forward_idle()
     {
-        //ManagerGame.zombieMove = false;
         isMoving = false;
         isCalcued = false;
     }
 
-    void Right()
+    void zombie_back_idle()
     {
-        if (MoveUtil.MoveByFrame(transform, nextPosition, moveSpeed) == 0.0f)
+        isMoving = false;
+        isCalcued = false;
+    }
+
+    void zombie_right_idle()
+    {
+        isMoving = false;
+        isCalcued = false;
+    }
+
+    void zombie_left_idle()
+    {
+        isMoving = false;
+        isCalcued = false;
+    }
+
+    void zombie_right()
+    {
+        if ((r = MoveUtil.MoveByFrame(transform, nextPosition, moveSpeed)) == 0.0f)
         {
             transform.position = nextPosition;
-            state = State.Idle;
+            zombie_movement = Zombie_Movement.zombie_right_idle;
+            _animator.SetInteger("zombie_movement", (int)zombie_movement);
             isMoving = false;
             //ManagerGame.zombieMove = false;
             isCalcued = false;
@@ -249,12 +271,13 @@ public class CharacterZombie : MonoBehaviour
         }
     }
 
-    void Left()
+    void zombie_left()
     {
-        if (MoveUtil.MoveByFrame(transform, nextPosition, moveSpeed) == 0.0f)
+        if ((r = MoveUtil.MoveByFrame(transform, nextPosition, moveSpeed)) == 0.0f)
         {
             transform.position = nextPosition;
-            state = State.Idle;
+            zombie_movement = Zombie_Movement.zombie_left_idle;
+            _animator.SetInteger("zombie_movement", (int)zombie_movement);
             isMoving = false;
             //ManagerGame.zombieMove = false;
             isCalcued = false;
@@ -262,12 +285,13 @@ public class CharacterZombie : MonoBehaviour
         }
     }
 
-    void Up()
+    void zombie_back()
     {
-        if (MoveUtil.MoveByFrame(transform, nextPosition, moveSpeed) == 0.0f)
+        if ((r = MoveUtil.MoveByFrame(transform, nextPosition, moveSpeed)) == 0.0f)
         {
             transform.position = nextPosition;
-            state = State.Idle;
+            zombie_movement = Zombie_Movement.zombie_back_idle;
+            _animator.SetInteger("zombie_movement", (int)zombie_movement);
             isMoving = false;
             //ManagerGame.zombieMove = false;
             isCalcued = false;
@@ -275,12 +299,13 @@ public class CharacterZombie : MonoBehaviour
         }
     }
 
-    void Down()
+    void zombie_forward()
     {
-        if (MoveUtil.MoveByFrame(transform, nextPosition, moveSpeed) == 0.0f)
+        if ((r = MoveUtil.MoveByFrame(transform, nextPosition, moveSpeed)) == 0.0f)
         {
             transform.position = nextPosition;
-            state = State.Idle;
+            zombie_movement = Zombie_Movement.zombie_forward_idle;
+            _animator.SetInteger("zombie_movement", (int)zombie_movement);
             isMoving = false;
             //ManagerGame.zombieMove = false;
             isCalcued = false;

@@ -28,9 +28,13 @@ public class UI_Timer : MonoBehaviour
 
     void Update()
     {
+ 		//if(//게임 시작 되면 타이머가 시작되게)
+        {        }
+
         Timer();
-        //ShowTimeLeft();
-    }
+        
+        
+	}
 
     // Time이 0으로 줄어드는 것
     void Timer()
@@ -45,6 +49,7 @@ public class UI_Timer : MonoBehaviour
         {
             ResetTimer();
             ManagerGame.john_day++; // day 추가
+            TurnCount();
             ManagerGame.gamePhase = 2;
 
         }
@@ -52,8 +57,18 @@ public class UI_Timer : MonoBehaviour
         if (timeLeft < 0)
         {
             ResetTimer();
+            TurnCount();
             ManagerGame.gamePhase = 5;
 
+        }
+    }
+
+    void TurnCount()
+    {
+        ManagerGame.john_day++; // day 추가
+        foreach (GameObject bomb in ManagerGame.bombList)
+        {
+            bomb.GetComponent<BombCollider>().count++;
         }
     }
 

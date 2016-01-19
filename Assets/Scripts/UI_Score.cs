@@ -25,7 +25,7 @@ public class UI_Score : MonoBehaviour {
 
     // day 업데이트할때 7->1로 갈때
     // john_score를 먼저 계산 하고 나서 이거 호출
-    static void UpdateScore()
+    public static void UpdateScore()
     {
         tempScore = ManagerGame.john_score;
         UI_score.text = tempScore.ToString();

@@ -3,14 +3,14 @@ using System.Collections;
 
 public class ManagerCharacter : MonoBehaviour
 {
-    public enum State
+    public enum John_Movement
     {
-        Idle, Right, Left, Up, Down, Dead
+        john_right_idle = 1, john_left_idle, john_back_idle, john_forward_idle, john_right = 11, john_left = 22, john_back = 33, john_forward = 44, john_dead
     }
 
     public float movePixel = 1f;
     public float moveSpeed = 3f;
-    public State state = State.Idle;
+    public John_Movement john_movement = John_Movement.john_forward_idle;
 
     public GameObject johnGhost;
     public GameObject touchPad;
@@ -29,7 +29,7 @@ public class ManagerCharacter : MonoBehaviour
     {
         transform = GetComponent<Transform>();
         prevPosition = transform.position;
-        //_animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
         _layermask = LayerMask.GetMask("TouchPad");
         johnGhost.transform.position = transform.position;
         touchPad.transform.position = transform.position;
@@ -39,10 +39,10 @@ public class ManagerCharacter : MonoBehaviour
     {
         if (ManagerGame.ghostMoved == true)
         {
-            Invoke(state.ToString(), 0.0f);
+            Invoke(john_movement.ToString(), 0.0f);
         }
 
-        if (state == State.Dead)
+        if (john_movement == John_Movement.john_dead)
         {
             return;
         }
@@ -54,6 +54,10 @@ public class ManagerCharacter : MonoBehaviour
 
         if (ManagerGame.gamePhase == 5)
         {
+            //Day Text - 상단, 하단로그 + 스코어 업데이트
+            UI_DayCount.UpdateDayCount();
+            UI_Score.UpdateScore();
+            ShowMessage.ShowMessage_Day();
             Mid();
             ManagerGame.john_day++;
             ManagerGame.gamePhase = 2;
@@ -67,7 +71,6 @@ public class ManagerCharacter : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             ManagerGame.ghostMoved = false;
-            //ManagerGame.moveOn = false;
 
             Vector2 wp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Ray2D ray = new Ray2D(wp, Vector2.zero);
@@ -76,7 +79,6 @@ public class ManagerCharacter : MonoBehaviour
 
             if (hit.collider != null)
             {
-                Debug.Log(hit.transform.name);
                 int layer = hit.transform.gameObject.layer;
 
                 if (layer == LayerMask.NameToLayer("TouchPad"))
@@ -91,7 +93,8 @@ public class ManagerCharacter : MonoBehaviour
                         johnsNextPosition.x += movePixel;
                         johnGhost.transform.position = johnsNextPosition;
                         ManagerGame.ghostMoved = true;
-                        state = State.Right;
+                        john_movement = John_Movement.john_right;
+                        _animator.SetInteger("john_movement", (int)john_movement);
                         touchPad.transform.position = johnGhost.transform.position;
                         touchPad.SetActive(false);
                     }
@@ -101,7 +104,8 @@ public class ManagerCharacter : MonoBehaviour
                         johnsNextPosition.x -= movePixel;
                         johnGhost.transform.position = johnsNextPosition;
                         ManagerGame.ghostMoved = true;
-                        state = State.Left;
+                        john_movement = John_Movement.john_left;
+                        _animator.SetInteger("john_movement", (int)john_movement);
                         touchPad.transform.position = johnGhost.transform.position;
                         touchPad.SetActive(false);
                     }
@@ -111,7 +115,8 @@ public class ManagerCharacter : MonoBehaviour
                         johnsNextPosition.y += movePixel;
                         johnGhost.transform.position = johnsNextPosition;
                         ManagerGame.ghostMoved = true;
-                        state = State.Up;
+                        john_movement = John_Movement.john_back;
+                        _animator.SetInteger("john_movement", (int)john_movement);
                         touchPad.transform.position = johnGhost.transform.position;
                         touchPad.SetActive(false);
                     }
@@ -121,13 +126,14 @@ public class ManagerCharacter : MonoBehaviour
                         johnsNextPosition.y -= movePixel;
                         johnGhost.transform.position = johnsNextPosition;
                         ManagerGame.ghostMoved = true;
-                        state = State.Down;
+                        john_movement = John_Movement.john_forward;
+                        _animator.SetInteger("john_movement", (int)john_movement);
                         touchPad.transform.position = johnGhost.transform.position;
                         touchPad.SetActive(false);
                     }
                     else if (tag == "Mid")
                     {
-                        ////Debug.Log("Mid");
+                        //Debug.Log("Mid");
                         //johnGhost.transform.position = johnsNextPosition;
                         //ManagerGame.ghostMoved = true;
                         //state = State.Idle;
@@ -147,7 +153,8 @@ public class ManagerCharacter : MonoBehaviour
         prevPosition = transform.position;
         johnGhost.transform.position = johnsNextPosition;
         ManagerGame.ghostMoved = true;
-        state = State.Idle;
+        john_movement = John_Movement.john_forward_idle;
+        _animator.SetInteger("john_movement", (int)john_movement);
         touchPad.transform.position = johnGhost.transform.position;
         touchPad.SetActive(false);
     }
@@ -170,6 +177,7 @@ public class ManagerCharacter : MonoBehaviour
             if (ManagerGame.john_hp + ManagerGame.appleValue >= 100)
             {
 
+                ShowMessage2.ShowMessage_Apple();
                 UI_HPGauge.HPPlus(ManagerGame.appleValue); // ManagerGame.john_hp = 100 
                                                            // & HP게이지 사이즈 1로 조정
 
@@ -181,6 +189,7 @@ public class ManagerCharacter : MonoBehaviour
             }
             else // 더해도 Full HP 아닐 때
             {
+                ShowMessage2.ShowMessage_Apple();				
                 UI_HPGauge.HPPlus(ManagerGame.appleValue); // ManagerGame.john_hp + 20 
                                                            // & HP게이지 사이즈 조정
                 //메세지Test
@@ -193,7 +202,7 @@ public class ManagerCharacter : MonoBehaviour
 
 
     /** For Animation State **/
-    void Idle()
+    void john_right_idle()
     {
 
         ManagerGame.ghostMoved = false;
@@ -202,46 +211,77 @@ public class ManagerCharacter : MonoBehaviour
         touchPad.SetActive(true);
     }
 
-    void Right()
+    void john_left_idle()
+    {
+
+        ManagerGame.ghostMoved = false;
+
+        //ManagerGame.moveOn = false;
+        touchPad.SetActive(true);
+    }
+
+    void john_forward_idle()
+    {
+
+        ManagerGame.ghostMoved = false;
+
+        //ManagerGame.moveOn = false;
+        touchPad.SetActive(true);
+    }
+
+    void john_back_idle()
+    {
+
+        ManagerGame.ghostMoved = false;
+
+        //ManagerGame.moveOn = false;
+        touchPad.SetActive(true);
+    }
+
+    void john_right()
     {
         if (MoveUtil.MoveByFrame(transform, johnGhost.transform.position, moveSpeed) == 0.0f)
         {
             transform.position = johnGhost.transform.position;
-            state = State.Idle;
-            touchPad.SetActive(true);
+            john_movement = John_Movement.john_right_idle;
+            _animator.SetInteger("john_movement", (int)john_movement);
+            //touchPad.SetActive(true);
             return;
         }
     }
 
-    void Left()
+    void john_left()
     {
         if (MoveUtil.MoveByFrame(transform, johnGhost.transform.position, moveSpeed) == 0.0f)
         {
             transform.position = johnGhost.transform.position;
-            state = State.Idle;
-            touchPad.SetActive(true);
+            john_movement = John_Movement.john_left_idle;
+            _animator.SetInteger("john_movement", (int)john_movement);
+            //touchPad.SetActive(true);
             return;
         }
     }
 
-    void Up()
+    void john_forward()
     {
         if (MoveUtil.MoveByFrame(transform, johnGhost.transform.position, moveSpeed) == 0.0f)
         {
             transform.position = johnGhost.transform.position;
-            state = State.Idle;
-            touchPad.SetActive(true);
+            john_movement = John_Movement.john_forward_idle;
+            _animator.SetInteger("john_movement", (int)john_movement);
+            //touchPad.SetActive(true);
             return;
         }
     }
 
-    void Down()
+    void john_back()
     {
         if (MoveUtil.MoveByFrame(transform, johnGhost.transform.position, moveSpeed) == 0.0f)
         {
             transform.position = johnGhost.transform.position;
-            state = State.Idle;
-            touchPad.SetActive(true);
+            john_movement = John_Movement.john_back_idle;
+            _animator.SetInteger("john_movement", (int)john_movement);
+            //touchPad.SetActive(true);
             return;
         }
     }
